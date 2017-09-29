@@ -33,7 +33,7 @@ class MessageModel extends BaseModel
         $userModel = D('User');
         foreach ($result as $key => $value) {
             $result[$key] = $this->getOne(['from_user_id' => $value['from_user_id']],'', 'id DESC');
-            $username = $userModel->getColumn(['id' => $value['user_id']], 'name');
+            $username = $userModel->getColumn(['id' => $value['from_user_id']], 'name');
             $result[$key]['user_name'] = ($username ? $username : '');
         }
         return $result;
