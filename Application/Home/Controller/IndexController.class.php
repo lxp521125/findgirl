@@ -65,6 +65,29 @@ class IndexController extends CommonController
     }
 
     /**
+     * 周边学生
+     * @return [type] [description]
+     */
+    public function getAroundStudent()
+    {
+        $this->_status = SystemConstant::getConstant('faile');
+        $this->_retMsg = '失败';
+        $data = [
+            'x' => I('x', ''),//经度
+            'y' => I('y', ''),//纬度
+            'user_id' => I('user_id', 0, 'intval')
+        ];
+        if (!empty($data['x']) && !empty($data['y'])) {
+            $data = AL('User')->findAroundUser($data);
+            if (!empty($data)) {
+                $this->_retMsg = '获取成功';
+                $this->_status = SystemConstant::getConstant('success');
+                $this->_data = $data;
+            }
+        }
+        $this->_returnJson();
+    }
+    /**
      * 添加消息
      */
     public function addMessage()

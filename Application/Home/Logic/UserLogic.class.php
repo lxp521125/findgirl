@@ -6,20 +6,23 @@ namespace Home\Logic;
  */
 class UserLogic
 {
-    public function findAroundUser($x, $y, $long = 6)
+    public function findAroundUser($data, $long = 6)
     {
+        $userId = $data['user_id'];
+
         $geohash = AL('Geohash');
-        $hash = $geohash->encode($x, $y);
+        $hash = $geohash->encode($data['x'], $data['y']);
         //取前缀，前缀约长范围越小
-        $prefix = substr($hash, 0, 6);
+        $prefix = substr($hash, 0, $long);
         //取出相邻八个区域
         $neighbors = $geohash->neighbors($prefix);
         array_push($neighbors, $prefix);
         $position =  D('Position');
         $data = [];
         foreach ($neighbors as $v) {
-            if (!empty($position->get10user($v))) {
-                $data[] = $position->get10user($v);
+            $tmp = $position->get10user($v, $userId);
+            if (!empty($tmp)) {
+                $data[] = $tmp;
             }
         }
         $retdata = [];
