@@ -39,8 +39,9 @@ class TestController extends CommonController
 
     public function testAddmessage()
     {
-        for ($i = 0; $i <= 100; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             $from_user_id = rand(25, 3000);
+            $from_user_id = 180;
             $mess = 'Hello.' . $this->getName();
             $url = 'http://www.gtech9.com/?act=addMessage&from_user_id=' . $from_user_id . '&to_user_id=4513&message=' . $mess;
             echo file_get_contents($url);
@@ -57,5 +58,14 @@ class TestController extends CommonController
             $str .= $a[rand(1, strlen($a))];
         }
         return $str;
+    }
+
+    public function testSetline()
+    {
+        for ($i = 0; $i <= 100; $i++) {
+            $userId = rand(25, 3000);
+            D('Online')->setLine(['user_id'=> $userId, 'create_time' => time()]);
+        }
+        exit;
     }
 }
