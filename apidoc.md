@@ -25,11 +25,8 @@ act=addPosition&x=39.98123848&y=116.30683690&user_id=1
 用户课程信息
 ?act=getUserOtherList&user_id=1,2,3
 
-更新用户在线时间
-?act=setOnline&user_id=2
-
 //获取在线人数
-?act=getOnlineCount
+?act=getOnlineCount&user_id=2
 
 //获取周边人数
 ?act=getAroundStudent&user_id=2&x=39.98123848&y=116.30683690
