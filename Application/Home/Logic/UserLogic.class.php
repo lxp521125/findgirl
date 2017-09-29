@@ -19,19 +19,26 @@ class UserLogic
         $data = [];
         foreach ($neighbors as $v) {
             if (!empty($position->get10user($v))) {
-                $data = $position->get10user($v);
+                $data[] = $position->get10user($v);
             }
         }
         $retdata = [];
         $userId = [];
 
-        foreach ($data as $v) {
-            $retdata[] = $v;
-            $userId[] = $v['user_id'];
+        foreach ($data as $fv) {
+            foreach ($fv as $v) {
+                $retdata[] = $v;
+                $userId[] = $v['user_id'];
+            }
         }
-        $userId = [1,2,3,4];
         $userInfo = D('UserOther')->getUsreOther($userId);
-        p($userInfo);
+        $newUserData = [];
+        foreach ($userInfo as $value) {
+            $newUserData[$value['user_id']] = $value; 
+        }
+        foreach ($retdata as &$value) {
+            $value['user_info'] = $newUserData[$value['user_id']];
+        }
         //用户信息；
         //合并用户信息；
         return $retdata;
