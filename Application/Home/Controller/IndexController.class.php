@@ -56,9 +56,8 @@ class IndexController extends CommonController
             'create_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
-            $data['geohash'] = D('Geohash', 'Logic')->encode($data['x'], $data['y']);
-            $data['id'] = D('Position')->add($data);
-            if ($data['id']) {
+            $data['geohash'] = AL('Geohash')->encode($data['x'], $data['y']);
+            if (D('Position')->addPosition($data)) {
                 $this->_retMsg = '获取成功';
                 $this->_status = SystemConstant::getConstant('success');
                 $this->_data = $data;
@@ -119,6 +118,22 @@ class IndexController extends CommonController
         $userId = explode(',', I('user_id', ''));
         if (!empty($userId)) {
             $this->_data = D('UserOther')->getUsreOther($userId);
+        }
+        $this->_retMsg = '获取成功';
+        $this->_status = SystemConstant::getConstant('success');
+        $this->_returnJson();
+    }
+
+    /**
+     * 更新在线时间
+    */
+    public function setOnline()
+    {
+        $this->_status = SystemConstant::getConstant('faile');
+        $this->_retMsg = '失败';
+        $usreId = I('user_id', 0, 'intval');
+        if ($usreId) {
+
         }
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
