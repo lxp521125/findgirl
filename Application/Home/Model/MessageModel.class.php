@@ -26,12 +26,15 @@ class MessageModel extends BaseModel
         if ($userId <= 0) {
             return [];
         }
-        $result = $this->getDistinct(['to_user_id' => $userId], 'from_user_id');
+        $result = $this->getDistinct(['to_user_id' => $userId, 'status' => self::STATUS_ZERO], 'from_user_id');
         if (!$result) {
             return [];
         }
+        $userModel = D('User');
         foreach ($result as $key => $value) {
             $result[$key] = $this->getOne(['from_user_id' => $value['from_user_id']],'', 'id DESC');
+            $username = $userModel->getColumn(['id' => $value['user_id']], 'name');
+            $result[$key]['user_name'] = ($username ? $username : '');
         }
         return $result;
     }

@@ -17,7 +17,8 @@ class UserOtherModel extends BaseModel
         if ($result) {
             $userModel = D('User');
             foreach ($result as $key => $value) {
-                $result[$key]['user_name'] = $userModel->getColumn(['id' => $value['user_id']], 'name');
+                $username = $userModel->getColumn(['id' => $value['user_id']], 'name');
+                $result[$key]['user_name'] = ($username ? $username : '');
             }
         }
         return ($result ? $result : []);
