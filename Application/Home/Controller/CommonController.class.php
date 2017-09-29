@@ -11,6 +11,11 @@ class CommonController extends BaseController
 
     protected $_sessionID = ''; // sessionID
 
+    protected $_status = '';
+
+    protected $_retMsg = '';
+
+    protected $_data = [];
     /**
      * 初始化
      */
