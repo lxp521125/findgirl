@@ -28,7 +28,6 @@ class BaseModel extends Model
         }
         $result = $this->find();
         if (empty($result)) {
-            Log::write('can not find data:' . $this->getLastSql());
             return false;
         } else {
             return $result;
@@ -59,10 +58,21 @@ class BaseModel extends Model
         }
         $result = $this->select();
         if (empty($result)) {
-            Log::write('can not find data:' . $this->getLastSql());
             return false;
         } else {
             return $result;
         }
+    }
+
+    /**
+     * 获取一条记录的某个字段值
+     * @param string $field 字段名
+     * @param string $field 字段名
+     * @param string $spea 字段数据间隔符号 NULL返回数组
+     * @return mixed
+     */
+    public function getColumn($where = [], $field = 'id', $sepa = null)
+    {
+        return $this->where($where)->getField($field, $sepa);
     }
 }
