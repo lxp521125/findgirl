@@ -28,7 +28,6 @@ class BaseModel extends Model
         }
         $result = $this->find();
         if (empty($result)) {
-            Log::write('can not find data:' . $this->getLastSql());
             return false;
         } else {
             return $result;
@@ -59,7 +58,6 @@ class BaseModel extends Model
         }
         $result = $this->select();
         if (empty($result)) {
-            Log::write('can not find data:' . $this->getLastSql());
             return false;
         } else {
             return $result;
