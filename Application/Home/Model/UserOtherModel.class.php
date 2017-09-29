@@ -14,11 +14,10 @@ class UserOtherModel extends BaseModel
             return [];
         }
         $result = $this->getList(['user_id' => ['IN', $userId]], '', 'id DESC');
-        p($this->_sql());
         if ($result) {
             $userModel = D('User');
             foreach ($result as $key => $value) {
-                $result['user_name'] = $userModel->getColumn(['id' => $value['user_id']], 'name');
+                $result[$key]['user_name'] = $userModel->getColumn(['id' => $value['user_id']], 'name');
             }
         }
         return ($result ? $result : []);
