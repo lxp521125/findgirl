@@ -3,11 +3,50 @@ namespace Home\Logic;
 
 
 /**
- * Geohash generation class for php 
- *
- * This file copyright (C) 2013 Bruce Chen (http://weibo.com/smcz)
- *
- * Author: Bruce Chen (weibo: @一个开发者)
+Usage
+
+例如: 用iPhone/android手机定位得到理想国际大厦的经纬度: 39.98123848, 116.30683690 然后查找附近的妞 
+
+$geohash = new Geohash;
+//得到这点的hash值
+$hash = $geohash->encode(39.98123848, 116.30683690);
+//取前缀，前缀约长范围越小
+$prefix = substr($hash, 0, 6);
+//取出相邻八个区域
+$neighbors = $geohash->neighbors($prefix);
+array_push($neighbors, $prefix);
+
+print_r($neighbors);
+得到9个geohash值
+
+//得到9个geohash值
+
+Array
+(
+    [top] => wx4eqx
+    [bottom] => wx4eqt
+    [right] => wx4eqy
+    [left] => wx4eqq
+    [topleft] => wx4eqr
+    [topright] => wx4eqz
+    [bottomright] => wx4eqv
+    [bottomleft] => wx4eqm
+    [0] => wx4eqw
+)
+范围如图:
+用sql语句查询
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqw%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqx%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqt%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqy%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqq%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqr%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqz%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqv%';
+SELECT * FROM xy WHERE geohash LIKE 'wx4eqm%';
+看一下是否用上索引 (一共有50多万行测试数据):
+
+EXPLAIN SELECT * FROM xy WHERE geohash LIKE 'wx4eqw%';
  *
  */
 
