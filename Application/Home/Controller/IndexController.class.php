@@ -101,10 +101,11 @@ class IndexController extends CommonController
         $data = [
             'x' => I('x', ''),//经度
             'y' => I('y', ''),//纬度
-            'user_id' => I('user_id', 0, 'intval')
+            'user_id' => I('user_id', 0, 'intval'),
         ];
+        $land = I('land', '6');//经度
         if (!empty($data['x']) && !empty($data['y'])) {
-            $data = AL('User')->findAroundUser($data);
+            $data = AL('User')->findAroundUser($data, $land);
             if (!empty($data)) {
                 $this->_retMsg = '获取成功';
                 $this->_status = SystemConstant::getConstant('success');
@@ -119,7 +120,7 @@ class IndexController extends CommonController
     public function addMessage()
     {
         $this->_status = SystemConstant::getConstant('faile');
-        $this->_retMsg = '失败';
+        $this->_retMsg = '是不是没登录失败';
         $data = [
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者

@@ -37,7 +37,7 @@ class PositionModel extends BaseModel
 
     public function get10user($geohash, $userId=0)
     {
-        $data = $this->where(['geohash' => ['like', $geohash.'%'], 'user_id' => ['NEQ', $userId]])->order('create_time desc')->limit(10)->select();
+        $data = $this->where(['geohash' => ['like', $geohash.'%'], 'user_id' => ['NEQ', $userId]])->order('create_time desc')->select();
         // p($this->_sql(),0);
         return $data;
     }
