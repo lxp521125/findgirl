@@ -14,6 +14,7 @@ class IndexController extends CommonController
 
     /**
      * 添加用户
+     *
      */
     public function addUser()
     {
@@ -72,8 +73,8 @@ class IndexController extends CommonController
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
             'message' => I('message', ''),//geohash
-            'create_time' => date('Y-m-d H:i:s'),
-            'update_time' => date('Y-m-d H:i:s')
+            'create_time' => time(),
+            'update_time' => time()
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);
@@ -87,33 +88,36 @@ class IndexController extends CommonController
     }
 
     /**
-     * 更新消息为已读
+     * 拉取历史数据
     */
-    public function setMessage()
+    public function getMessageList()
     {
-        $messageId = explode(',', I('message_id', ''));
-        if (!empty($messageId)) {
-            D('Message')
-                ->where(['id' => ['IN', $messageId]])
-                ->save(['status' => \Home\Model\MessageModel::STATUS_ONE]);
+        $toUserId = I('to_user_id', 0, 'intval');
+        if ($toUserId > 0) {
+            $result = D('Message')->getNewMessageList($toUserId);
+            $this->_data = ($result ? $result : []);
         }
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
         $this->_returnJson();
     }
 
+
     /**
-     * 拉取历史记录
+     * 拉取某个用户发的历史记录
     */
-    public function getMessageList()
+    public function getMessageListByFromUserId()
     {
+        $fromUserId = I('from_user_id', 0, 'intval');
         $toUserId = I('to_user_id', 0, 'intval');
-        if ($toUserId > 0) {
-            $result = D('Message')->getList(
-                ['to_user_id' => $toUserId, 'status' => \Home\Model\MessageModel::STATUS_ZERO],
-                '',
-                'id DESC'
-            );
+        if ($fromUserId > 0 && $toUserId > 0) {
+            $where = [
+                'from_user_id' => $fromUserId,
+                'to_user_id' => $toUserId,
+                'status' => \Home\Model\MessageModel::STATUS_ZERO
+            ];
+            $result = D('Message')->getList($where, '','id DESC');
+            $result && D('Message')->where($where)->save(['status' => \Home\Model\MessageModel::STATUS_ONE]);
             $this->_data = ($result ? $result : []);
         }
         $this->_retMsg = '获取成功';
