@@ -75,4 +75,14 @@ class BaseModel extends Model
     {
         return $this->where($where)->getField($field, $sepa);
     }
+
+    /**
+     * 获取总数
+     * @param array $map 查询条件
+     * @return int
+     */
+    public function getCount($map = [])
+    {
+        return $this->where($map)->count();
+    }
 }

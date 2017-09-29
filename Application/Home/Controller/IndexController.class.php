@@ -129,12 +129,22 @@ class IndexController extends CommonController
     */
     public function setOnline()
     {
-        $this->_status = SystemConstant::getConstant('faile');
-        $this->_retMsg = '失败';
-        $usreId = I('user_id', 0, 'intval');
-        if ($usreId) {
-
+        $data['user_id'] = I('user_id', 0, 'intval');
+        if ($data['user_id']) {
+            $data['create_time'] = time();
+            D('Online')->setLine($data);
         }
+        $this->_retMsg = '获取成功';
+        $this->_status = SystemConstant::getConstant('success');
+        $this->_returnJson();
+    }
+
+    /**
+     * 获取在线人数
+    */
+    public function getOnlineCount()
+    {
+        $this->_data = ['count' => D('Online')->getCount(['create_time' => ['gt', (time() - 300)]])];
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
         $this->_returnJson();
