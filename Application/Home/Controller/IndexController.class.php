@@ -14,6 +14,7 @@ class IndexController extends CommonController
 
     /**
      * 添加用户
+     *
      */
     public function addUser()
     {
@@ -21,7 +22,8 @@ class IndexController extends CommonController
         $data = [
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
-            'ip' => I('ip', '')
+            'ip' => I('ip', ''),
+            'create_time' => date('Y-m-d H:i:s')
         ];
         $this->_status = SystemConstant::getConstant('faile');
         $this->_retMsg = '用户名相同';
@@ -37,11 +39,6 @@ class IndexController extends CommonController
     }
 
     /**
-     *用户数据
-    */
-
-
-    /**
      * 添加位置数据
     */
     public function addPosition()
@@ -51,7 +48,8 @@ class IndexController extends CommonController
         $data = [
             'x' => I('x', ''),//经度
             'y' => I('y', ''),//纬度
-            'user_id' => I('user_id', 0, 'intval')
+            'user_id' => I('user_id', 0, 'intval'),
+            'create_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
             $data['geohash'] = AL('Geohash')->encode($data['x'], $data['y']);
@@ -98,6 +96,8 @@ class IndexController extends CommonController
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
             'message' => I('message', ''),//geohash
+            'create_time' => time(),
+            'update_time' => time()
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);
@@ -111,17 +111,36 @@ class IndexController extends CommonController
     }
 
     /**
-     * 拉取历史记录
+     * 拉取历史数据
     */
     public function getMessageList()
     {
         $toUserId = I('to_user_id', 0, 'intval');
         if ($toUserId > 0) {
-            $result = D('Message')->getList(
-                ['to_user_id' => $toUserId, 'status' => \Home\Model\MessageModel::STATUS_ZERO],
-                '',
-                'id DESC'
-            );
+            $result = D('Message')->getNewMessageList($toUserId);
+            $this->_data = ($result ? $result : []);
+        }
+        $this->_retMsg = '获取成功';
+        $this->_status = SystemConstant::getConstant('success');
+        $this->_returnJson();
+    }
+
+
+    /**
+     * 拉取某个用户发的历史记录
+    */
+    public function getMessageListByFromUserId()
+    {
+        $fromUserId = I('from_user_id', 0, 'intval');
+        $toUserId = I('to_user_id', 0, 'intval');
+        if ($fromUserId > 0 && $toUserId > 0) {
+            $where = [
+                'from_user_id' => $fromUserId,
+                'to_user_id' => $toUserId,
+                'status' => \Home\Model\MessageModel::STATUS_ZERO
+            ];
+            $result = D('Message')->getList($where, '','id DESC');
+            $result && D('Message')->where($where)->save(['status' => \Home\Model\MessageModel::STATUS_ONE]);
             $this->_data = ($result ? $result : []);
         }
         $this->_retMsg = '获取成功';

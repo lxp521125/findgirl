@@ -85,4 +85,12 @@ class BaseModel extends Model
     {
         return $this->where($map)->count();
     }
+
+    /**
+     * 获取某个字段的去重列表
+     */
+    public function getDistinct($where=[], $field = 'id')
+    {
+        return $this->where($where)->distinct(true)->field($field)->select();
+    }
 }
