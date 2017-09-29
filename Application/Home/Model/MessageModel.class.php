@@ -31,7 +31,7 @@ class MessageModel extends BaseModel
             return [];
         }
         $resultChunk = array_chunk($result, 10);
-        $result = (isset($resultChunk[$page]) ? $resultChunk[$page] : []);
+        $result = (isset($resultChunk[$page - 1]) ? $resultChunk[$page - 1] : []);
         if (!$result) {
             return [];
         }
