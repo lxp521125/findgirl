@@ -12,7 +12,6 @@ class IndexController extends CommonController
         
     }
 
-
     /**
      * 添加用户
      */
@@ -23,8 +22,7 @@ class IndexController extends CommonController
         $data = [
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
-            'ip' => I('ip', ''),
-            'create_time' => date('Y-m-d H:i:s')
+            'ip' => I('ip', '')
         ];
         if (!empty($data['name']) && !empty($data['equipment'])) {
             $data['user_id'] = D('User')->addUser($data);
@@ -52,8 +50,7 @@ class IndexController extends CommonController
         $data = [
             'x' => I('x', ''),//经度
             'y' => I('y', ''),//纬度
-            'user_id' => I('user_id', 0, 'intval'),
-            'create_time' => date('Y-m-d H:i:s')
+            'user_id' => I('user_id', 0, 'intval')
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
             $data['geohash'] = AL('Geohash')->encode($data['x'], $data['y']);
@@ -77,8 +74,6 @@ class IndexController extends CommonController
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
             'message' => I('message', ''),//geohash
-            'create_time' => date('Y-m-d H:i:s'),
-            'update_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);

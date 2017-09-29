@@ -14,7 +14,7 @@ class PositionModel extends BaseModel
         }
         $this->startTrans();
         $id = D('PositionLog')->add($data);
-        if ($id) {
+        if (!$id) {
             $this->rollback();
             return false;
         }
@@ -31,7 +31,7 @@ class PositionModel extends BaseModel
                 return false;
             }
         }
-        $this->comment();
+        $this->commit();
         return true;
     }
 
