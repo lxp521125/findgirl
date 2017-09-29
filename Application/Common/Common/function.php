@@ -1,4 +1,30 @@
 <?php
+/**
+ * 实例化Event层
+
+ * @param  unknown $name
+ * @param  string  $layer
+ * @param  string  $level
+ * @return Ambigous <Action, \Think\Controller, false, Controller, boolean, unknown>
+ */
+function AE($name, $layer = 'Event', $level = '')
+{
+    return A($name, $layer, $level);
+}
+
+/**
+ * 实例化Logic层
+
+ * @param  unknown $name
+ * @param  string  $layer
+ * @param  string  $level
+ * @return Ambigous <Action, \Think\Controller, false, Controller, boolean, unknown>
+ */
+function AL($name, $layer = 'Logic', $level = '')
+{
+    return A($name, $layer, $level);
+}
+
 
 function p($data, $flag = true)
 {
