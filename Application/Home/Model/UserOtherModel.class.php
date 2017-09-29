@@ -13,7 +13,8 @@ class UserOtherModel extends BaseModel
         if (empty($userId)) {
             return [];
         }
-        $result = $this->getList(['uesr_id' => ['IN', $userId]], '', 'id DESC');
+        $result = $this->getList(['user_id' => ['IN', $userId]], '', 'id DESC');
+        p($this->_sql());
         if ($result) {
             $userModel = D('User');
             foreach ($result as $key => $value) {

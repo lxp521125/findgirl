@@ -29,6 +29,9 @@ class UserLogic
             $retdata[] = $v;
             $userId[] = $v['user_id'];
         }
+        $userId = [1,2,3,4];
+        $userInfo = D('UserOther')->getUsreOther($userId);
+        p($userInfo);
         //用户信息；
         //合并用户信息；
         return $retdata;

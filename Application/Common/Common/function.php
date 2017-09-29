@@ -1,4 +1,9 @@
 <?php
+
+function randomName()
+{
+    return chr(rand(65, 90)).chr(rand(65, 90)).chr(rand(65, 90)).chr(rand(97, 122));
+}
 /**
  * 实例化Event层
 
