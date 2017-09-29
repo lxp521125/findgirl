@@ -18,14 +18,15 @@ class IndexController extends CommonController
      */
     public function addUser()
     {
-        $this->_status = SystemConstant::getConstant('faile');
-        $this->_retMsg = '失败';
+        
         $data = [
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
             'ip' => I('ip', ''),
             'create_time' => date('Y-m-d H:i:s')
         ];
+        $this->_status = SystemConstant::getConstant('faile');
+        $this->_retMsg = '用户名相同';
         if (!empty($data['name']) && !empty($data['equipment'])) {
             $data['user_id'] = D('User')->addUser($data);
             if ($data['user_id']) {
