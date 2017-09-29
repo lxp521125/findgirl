@@ -3,11 +3,10 @@ namespace Home\Controller;
 
 use Think\Controller;
 
-
 class BaseController extends Controller
 {
     protected $_replace = [];
-     
+
     protected $title = '高顿教育';
 
     public function _initialize()
@@ -22,9 +21,10 @@ class BaseController extends Controller
     /**
      * @nodename 空操作名称
      *
-     * @param String $name            
+     * @param String $name
      */
-    public function _empty($name = ''){
+    public function _empty($name = '')
+    {
         p('Error!!' . $name);
     }
 
@@ -48,18 +48,18 @@ class BaseController extends Controller
     protected function _jsonReturn($data = [], $status = 0, $info = '', $callback = '', $type = '')
     {
         $jsondata = json_encode($data);
-		header('Content-Length:'.strlen($jsondata ));  	
+        header('Content-Length:' . strlen($jsondata));
         /**
          * 输出之前替换
          */
-        if(!empty($this->_replace)){
-            foreach ($this->_replace  as $k=>$v){
-                $jsondata = str_replace($k, $v,  $jsondata);
+        if (!empty($this->_replace)) {
+            foreach ($this->_replace as $k => $v) {
+                $jsondata = str_replace($k, $v, $jsondata);
             }
             $this->_replace = [];
         }
-        
-        if (! empty($callback)) {
+
+        if (!empty($callback)) {
             echo $callback . '(' . $jsondata . ')';
         } else {
 //             $this->ajaxReturn($rdata, $type);

@@ -27,7 +27,6 @@ class CommonController extends BaseController
 
     }
 
-
     /**
      * 所有接口的入口地址
      */

@@ -2,16 +2,15 @@
 namespace Home\Controller;
 
 use Gaodun\SystemConstant;
-use Home\Service;
 
 class IndexController extends CommonController
 {
     public function testAdduser()
     {
         set_time_limit(0);
-        for($i = 0; $i < 5000; $i++) {
+        for ($i = 0; $i < 5000; $i++) {
             $name = $this->getName();
-            $url = 'http://www.gtech9.com/?act=addUser&name='.$name.'&equipment={device_code:354332073180597,device_info:SM-G9250}&ip=12.23.113.23';
+            $url = 'http://www.gtech9.com/?act=addUser&name=' . $name . '&equipment={device_code:354332073180597,device_info:SM-G9250}&ip=12.23.113.23';
             echo file_get_contents($url);
             echo '<br />';
         }
@@ -20,10 +19,10 @@ class IndexController extends CommonController
 
     public function testAddmessage()
     {
-        for($i= 0; $i <= 100; $i++) {
+        for ($i = 0; $i <= 100; $i++) {
             $from_user_id = rand(25, 3000);
-            $mess = 'Hello.'. $this->getName();
-            $url = 'http://www.gtech9.com/?act=addMessage&from_user_id='.$from_user_id.'&to_user_id=4513&message='.$mess;
+            $mess = 'Hello.' . $this->getName();
+            $url = 'http://www.gtech9.com/?act=addMessage&from_user_id=' . $from_user_id . '&to_user_id=4513&message=' . $mess;
             echo file_get_contents($url);
             echo '<br />';
         }
@@ -34,10 +33,10 @@ class IndexController extends CommonController
     {
         $a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         $str = '';
-        for($i=1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
             $str .= $a[rand(1, strlen($a))];
         }
-        return  $str;
+        return $str;
     }
 
     /**
@@ -46,12 +45,12 @@ class IndexController extends CommonController
      */
     public function addUser()
     {
-        
+
         $data = [
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
             'ip' => I('ip', ''),
-            'create_time' => date('Y-m-d H:i:s')
+            'create_time' => date('Y-m-d H:i:s'),
         ];
         $this->_status = SystemConstant::getConstant('faile');
         $this->_retMsg = '用户名相同';
@@ -68,16 +67,16 @@ class IndexController extends CommonController
 
     /**
      * 添加位置数据
-    */
+     */
     public function addPosition()
     {
         $this->_status = SystemConstant::getConstant('faile');
         $this->_retMsg = '失败';
         $data = [
-            'x' => I('x', ''),//经度
-            'y' => I('y', ''),//纬度
+            'x' => I('x', ''), //经度
+            'y' => I('y', ''), //纬度
             'user_id' => I('user_id', 0, 'intval'),
-            'create_time' => date('Y-m-d H:i:s')
+            'create_time' => date('Y-m-d H:i:s'),
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
             $data['geohash'] = AL('Geohash')->encode($data['x'], $data['y']);
@@ -99,11 +98,11 @@ class IndexController extends CommonController
         $this->_status = SystemConstant::getConstant('faile');
         $this->_retMsg = '失败';
         $data = [
-            'x' => I('x', ''),//经度
-            'y' => I('y', ''),//纬度
+            'x' => I('x', ''), //经度
+            'y' => I('y', ''), //纬度
             'user_id' => I('user_id', 0, 'intval'),
         ];
-        $land = I('land', '6');//经度
+        $land = I('land', '6'); //经度
         if (!empty($data['x']) && !empty($data['y'])) {
             $data = AL('User')->findAroundUser($data, $land);
             if (!empty($data)) {
@@ -122,11 +121,11 @@ class IndexController extends CommonController
         $this->_status = SystemConstant::getConstant('faile');
         $this->_retMsg = '是不是没登录失败';
         $data = [
-            'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
-            'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
-            'message' => I('message', ''),//geohash
+            'from_user_id' => I('from_user_id', 0, 'intval'), //发送者
+            'to_user_id' => I('to_user_id', 0, 'intval'), //接收者
+            'message' => I('message', ''), //geohash
             'create_time' => time(),
-            'update_time' => time()
+            'update_time' => time(),
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);
@@ -141,12 +140,12 @@ class IndexController extends CommonController
 
     /**
      * 拉取历史数据
-    */
+     */
     public function getMessageList()
     {
         $toUserId = I('to_user_id', 0, 'intval');
         $page = I('page', 0, 'intval');
-        $page = ($page <=0 ? 1 : $page);
+        $page = ($page <= 0 ? 1 : $page);
         if ($toUserId > 0) {
             $result = D('Message')->getNewMessageList($toUserId, $page);
             $this->_data = ($result ? $result : []);
@@ -156,10 +155,9 @@ class IndexController extends CommonController
         $this->_returnJson();
     }
 
-
     /**
      * 拉取某个用户发的历史记录
-    */
+     */
     public function getMessageListByFromUserId()
     {
         $fromUserId = I('from_user_id', 0, 'intval');
@@ -168,9 +166,9 @@ class IndexController extends CommonController
             $where = [
                 'from_user_id' => $fromUserId,
                 'to_user_id' => $toUserId,
-                'status' => \Home\Model\MessageModel::STATUS_ZERO
+                'status' => \Home\Model\MessageModel::STATUS_ZERO,
             ];
-            $result = D('Message')->getList($where, '','id DESC');
+            $result = D('Message')->getList($where, '', 'id DESC');
             $result && D('Message')->where($where)->save(['status' => \Home\Model\MessageModel::STATUS_ONE]);
             $this->_data = ($result ? $result : []);
         }
@@ -181,7 +179,7 @@ class IndexController extends CommonController
 
     /**
      * 用户课程信息
-    */
+     */
     public function getUserOtherList()
     {
         $userId = explode(',', I('user_id', ''));
@@ -195,7 +193,7 @@ class IndexController extends CommonController
 
     /**
      * 更新在线时间
-    */
+     */
     public function setOnline()
     {
         $data['user_id'] = I('user_id', 0, 'intval');
@@ -210,7 +208,7 @@ class IndexController extends CommonController
 
     /**
      * 获取在线人数
-    */
+     */
     public function getOnlineCount()
     {
         $this->_data = ['count' => D('Online')->getCount(['create_time' => ['gt', (time() - 300)]])];

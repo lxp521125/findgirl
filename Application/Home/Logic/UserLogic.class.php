@@ -17,7 +17,7 @@ class UserLogic
         //取出相邻八个区域
         $neighbors = $geohash->neighbors($prefix);
         array_push($neighbors, $prefix);
-        $position =  D('Position');
+        $position = D('Position');
         $data = [];
         foreach ($neighbors as $v) {
             $tmp = $position->get10user($v, $userId);
@@ -38,7 +38,7 @@ class UserLogic
         $userInfo = D('UserOther')->getUsreOther($userId);
         $newUserData = [];
         foreach ($userInfo as $value) {
-            $newUserData[$value['user_id']] = $value; 
+            $newUserData[$value['user_id']] = $value;
         }
         foreach ($retdata as &$value) {
             $value['user_info'] = $newUserData[$value['user_id']];
@@ -49,13 +49,13 @@ class UserLogic
 
     }
 //     SELECT * FROM xy WHERE geohash LIKE 'wx4eqw%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqx%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqt%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqy%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqq%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqr%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqz%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqv%';
-// SELECT * FROM xy WHERE geohash LIKE 'wx4eqm%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqx%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqt%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqy%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqq%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqr%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqz%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqv%';
+    // SELECT * FROM xy WHERE geohash LIKE 'wx4eqm%';
 
 }
