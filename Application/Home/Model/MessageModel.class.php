@@ -21,12 +21,17 @@ class MessageModel extends BaseModel
      * @param int $userId 用户id
      * @return mixed
     */
-    public function getNewMessageList($userId)
+    public function getNewMessageList($userId, $page = 1)
     {
         if ($userId <= 0) {
             return [];
         }
         $result = $this->getDistinct(['to_user_id' => $userId, 'status' => self::STATUS_ZERO], 'from_user_id');
+        if (!$result) {
+            return [];
+        }
+        $resultChunk = array_chunk($result, 10);
+        $result = (isset($resultChunk[$page]) ? $resultChunk[$page] : []);
         if (!$result) {
             return [];
         }

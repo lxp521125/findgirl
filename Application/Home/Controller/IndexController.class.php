@@ -6,10 +6,38 @@ use Home\Service;
 
 class IndexController extends CommonController
 {
-    public function test()
+    public function testAdduser()
     {
-        p(M('User'));
+        set_time_limit(0);
+        for($i = 0; $i < 5000; $i++) {
+            $name = $this->getName();
+            $url = 'http://www.gtech9.com/?act=addUser&name='.$name.'&equipment={device_code:354332073180597,device_info:SM-G9250}&ip=12.23.113.23';
+            echo file_get_contents($url);
+            echo '<br />';
+        }
+        exit;
+    }
 
+    public function testAddmessage()
+    {
+        for($i= 0; $i <= 100; $i++) {
+            $from_user_id = rand(25, 3000);
+            $mess = 'Hello.'. $this->getName();
+            $url = 'http://www.gtech9.com/?act=addMessage&from_user_id='.$from_user_id.'&to_user_id=4513&message='.$mess;
+            echo file_get_contents($url);
+            echo '<br />';
+        }
+        exit;
+    }
+
+    protected function getName()
+    {
+        $a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $str = '';
+        for($i=1; $i <= 6; $i++) {
+            $str .= $a[rand(1, strlen($a))];
+        }
+        return  $str;
     }
 
     /**
@@ -116,8 +144,10 @@ class IndexController extends CommonController
     public function getMessageList()
     {
         $toUserId = I('to_user_id', 0, 'intval');
+        $page = I('page', 0, 'intval');
+        $page = ($page <=0 ? 1 : $page);
         if ($toUserId > 0) {
-            $result = D('Message')->getNewMessageList($toUserId);
+            $result = D('Message')->getNewMessageList($toUserId, $page);
             $this->_data = ($result ? $result : []);
         }
         $this->_retMsg = '获取成功';
