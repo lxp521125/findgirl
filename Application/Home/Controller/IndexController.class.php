@@ -9,7 +9,7 @@ class IndexController extends CommonController
     public function test()
     {
         p(M('User'));
-        
+
     }
 
     /**

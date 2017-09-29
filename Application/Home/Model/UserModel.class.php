@@ -17,10 +17,8 @@ class UserModel extends BaseModel
         }
         return $id;
         } catch (\Exception $e) {
-            return '';
+            return $this->getColumn(['name' => $data['name']], 'id');
         }
-        
-        
     }
 
 
