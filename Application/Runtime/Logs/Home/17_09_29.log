@@ -1,0 +1,17 @@
+[ 2017-09-29T12:41:02+08:00 ] 127.0.0.1 /?act=test
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000838s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.009415s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.009533s ]
+
+[ 2017-09-29T12:53:39+08:00 ] 127.0.0.1 /?act=test
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000060s ]
+INFO: [ app_init ] --END-- [ RunTime:0.004202s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.003711s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003852s ]
+SQL: SHOW COLUMNS FROM `user` [ RunTime:0.0181s ]
+
