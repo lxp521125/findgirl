@@ -30,3 +30,6 @@ act=addPosition&x=39.98123848&y=116.30683690&user_id=1
 
 //获取在线人数
 ?act=getOnlineCount
+
+//获取周边人数
+?act=getAroundStudent&user_id=2&x=39.98123848&y=116.30683690
