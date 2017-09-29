@@ -3,11 +3,7 @@ namespace Home\Controller;
 
 use Think\Controller;
 
-/**
- * 控制器的基础类-与TP框架交互
- * 
- * @author Stone
- */
+
 class BaseController extends Controller
 {
     protected $_replace = [];
