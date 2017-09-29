@@ -99,13 +99,10 @@ class IndexController extends CommonController
     {
         $toUserId = I('to_user_id', 0, 'intval');
         if ($toUserId > 0) {
-            $page = I('page', 1, 'intval');
-            $pageSize = 10;
             $result = D('Message')->getList(
                 ['to_user_id' => $toUserId, 'status' => \Home\Model\MessageModel::STATUS_ZERO],
                 '',
-                'id DESC',
-                ($page - 1) * $pageSize . ',' . $pageSize
+                'id DESC'
             );
             $this->_data = ($result ? $result : []);
         }
