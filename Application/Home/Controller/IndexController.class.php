@@ -111,8 +111,17 @@ class IndexController extends CommonController
         $this->_returnJson();
     }
 
-
-
-
-
+    /**
+     * 用户课程信息
+    */
+    public function getUserOtherList()
+    {
+        $userId = explode(',', I('user_id', ''));
+        if (!empty($userId)) {
+            $this->_data = D('UserOther')->getUsreOther($userId);
+        }
+        $this->_retMsg = '获取成功';
+        $this->_status = SystemConstant::getConstant('success');
+        $this->_returnJson();
+    }
 }
