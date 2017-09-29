@@ -24,7 +24,7 @@ class IndexController extends CommonController
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
             'ip' => I('ip', ''),
-            'creat_time' => time()
+            'creat_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['name']) && !empty($data['equipment'])) {
             $data['user_id'] = D('User')->addUser($data);
@@ -52,11 +52,11 @@ class IndexController extends CommonController
         $data = [
             'x' => I('x', ''),//经度
             'y' => I('y', ''),//纬度
-            'geohash' => I('y', ''),//geohash
             'user_id' => I('user_id', 0, 'intval'),
-            'creat_time' => time()
+            'creat_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
+            $data['geohash'] = D('Geohash', 'Logic')->encode($data['x'], $data['y']);
             $data['id'] = D('Position')->add($data);
             if ($data['id']) {
                 $this->_retMsg = '获取成功';
@@ -66,7 +66,6 @@ class IndexController extends CommonController
         }
         $this->_returnJson();
     }
-
 
     /**
      * 添加消息
@@ -79,8 +78,8 @@ class IndexController extends CommonController
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
             'message' => I('message', ''),//geohash
-            'creat_time' => time(),
-            'update_time' => time()
+            'creat_time' => date('Y-m-d H:i:s'),
+            'update_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);
@@ -93,7 +92,6 @@ class IndexController extends CommonController
         $this->_returnJson();
     }
 
-
     /**
      * 拉取历史记录
     */
@@ -101,10 +99,16 @@ class IndexController extends CommonController
     {
         $toUserId = I('to_user_id', 0, 'intval');
         if ($toUserId > 0) {
-            $page = I('page', 0, 'intval');
-            $result = D('Message')->getList(['to_user_id' => $toUserId]);
-
-        } 
+            $page = I('page', 1, 'intval');
+            $pageSize = 10;
+            $result = D('Message')->getList(
+                ['to_user_id' => $toUserId, 'status' => \Home\Model\MessageModel::STATUS_ZERO],
+                '',
+                'id DESC',
+                ($page - 1) * $pageSize . ',' . $pageSize
+            );
+            $this->_data = ($result ? $result : []);
+        }
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
         $this->_returnJson();
