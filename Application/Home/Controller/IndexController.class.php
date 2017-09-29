@@ -22,7 +22,8 @@ class IndexController extends CommonController
         $data = [
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
-            'ip' => I('ip', '')
+            'ip' => I('ip', ''),
+            'create_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['name']) && !empty($data['equipment'])) {
             $data['user_id'] = D('User')->addUser($data);
@@ -36,11 +37,6 @@ class IndexController extends CommonController
     }
 
     /**
-     *用户数据
-    */
-
-
-    /**
      * 添加位置数据
     */
     public function addPosition()
@@ -50,7 +46,8 @@ class IndexController extends CommonController
         $data = [
             'x' => I('x', ''),//经度
             'y' => I('y', ''),//纬度
-            'user_id' => I('user_id', 0, 'intval')
+            'user_id' => I('user_id', 0, 'intval'),
+            'create_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
             $data['geohash'] = AL('Geohash')->encode($data['x'], $data['y']);
@@ -74,6 +71,8 @@ class IndexController extends CommonController
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
             'message' => I('message', ''),//geohash
+            'create_time' => date('Y-m-d H:i:s'),
+            'update_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);
@@ -83,6 +82,22 @@ class IndexController extends CommonController
                 $this->_data = $data;
             }
         }
+        $this->_returnJson();
+    }
+
+    /**
+     * 更新消息为已读
+    */
+    public function setMessage()
+    {
+        $messageId = explode(',', I('message_id', ''));
+        if (!empty($messageId)) {
+            D('Message')
+                ->where(['id' => ['IN', $messageId]])
+                ->save(['status' => \Home\Model\MessageModel::STATUS_ONE]);
+        }
+        $this->_retMsg = '获取成功';
+        $this->_status = SystemConstant::getConstant('success');
         $this->_returnJson();
     }
 
