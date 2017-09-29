@@ -19,11 +19,19 @@ class UserLogic
         $data = [];
         foreach ($neighbors as $v) {
             if (!empty($position->get10user($v))) {
-                $data[] = $position->get10user($v);
+                $data = $position->get10user($v);
             }
         }
-        p($data);
-        return $data;
+        $retdata = [];
+        $userId = [];
+
+        foreach ($data as $v) {
+            $retdata[] = $v;
+            $userId[] = $v['user_id'];
+        }
+        //用户信息；
+        //合并用户信息；
+        return $retdata;
 
     }
 //     SELECT * FROM xy WHERE geohash LIKE 'wx4eqw%';
