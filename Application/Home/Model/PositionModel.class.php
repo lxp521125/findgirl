@@ -14,16 +14,24 @@ class PositionModel extends BaseModel
         }
         $this->startTrans();
         $id = D('PositionLog')->add($data);
-        if ($id) {
+        if (!$id) {
             $this->rollback();
             return false;
         }
         $data['create_time'] = time();
-        if (D('Position')->where(['user_id' => $data['user_id']])->save($data) === false) {
-            $this->rollback();
-            return false;
+        $id = $this->getColumn(['user_id' => $data['user_id']], 'id');
+        if ($id) {
+            if ($this->where(['id' => $id])->save($data) === false) {
+                $this->rollback();
+                return false;
+            }
+        } else {
+            if ($this->add($data) === false) {
+                $this->rollback();
+                return false;
+            }
         }
-        $this->comment();
+        $this->commit();
         return true;
     }
 

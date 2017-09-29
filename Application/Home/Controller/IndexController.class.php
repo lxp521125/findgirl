@@ -12,7 +12,6 @@ class IndexController extends CommonController
         
     }
 
-
     /**
      * 添加用户
      */
@@ -22,8 +21,7 @@ class IndexController extends CommonController
         $data = [
             'name' => I('name', ''),
             'equipment' => I('equipment', ''),
-            'ip' => I('ip', ''),
-            'create_time' => date('Y-m-d H:i:s')
+            'ip' => I('ip', '')
         ];
         $this->_status = SystemConstant::getConstant('faile');
         $this->_retMsg = '用户名相同';
@@ -53,8 +51,7 @@ class IndexController extends CommonController
         $data = [
             'x' => I('x', ''),//经度
             'y' => I('y', ''),//纬度
-            'user_id' => I('user_id', 0, 'intval'),
-            'create_time' => date('Y-m-d H:i:s')
+            'user_id' => I('user_id', 0, 'intval')
         ];
         if (!empty($data['x']) && !empty($data['y'])) {
             $data['geohash'] = AL('Geohash')->encode($data['x'], $data['y']);
@@ -78,8 +75,6 @@ class IndexController extends CommonController
             'from_user_id' => I('from_user_id', 0, 'intval'),//发送者
             'to_user_id' => I('to_user_id', 0, 'intval'),//接收者
             'message' => I('message', ''),//geohash
-            'create_time' => date('Y-m-d H:i:s'),
-            'update_time' => date('Y-m-d H:i:s')
         ];
         if (!empty($data['from_user_id']) && !empty($data['to_user_id']) && !empty($data['message'])) {
             $data['id'] = D('Message')->add($data);
@@ -130,12 +125,22 @@ class IndexController extends CommonController
     */
     public function setOnline()
     {
-        $this->_status = SystemConstant::getConstant('faile');
-        $this->_retMsg = '失败';
-        $usreId = I('user_id', 0, 'intval');
-        if ($usreId) {
-
+        $data['user_id'] = I('user_id', 0, 'intval');
+        if ($data['user_id']) {
+            $data['create_time'] = time();
+            D('Online')->setLine($data);
         }
+        $this->_retMsg = '获取成功';
+        $this->_status = SystemConstant::getConstant('success');
+        $this->_returnJson();
+    }
+
+    /**
+     * 获取在线人数
+    */
+    public function getOnlineCount()
+    {
+        $this->_data = ['count' => D('Online')->getCount(['create_time' => ['gt', (time() - 300)]])];
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
         $this->_returnJson();
