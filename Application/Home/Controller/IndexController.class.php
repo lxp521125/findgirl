@@ -104,7 +104,7 @@ class IndexController extends CommonController
             $page = I('page', 0, 'intval');
             $result = D('Message')->getList(['to_user_id' => $toUserId]);
 
-        }
+        } 
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
         $this->_returnJson();
