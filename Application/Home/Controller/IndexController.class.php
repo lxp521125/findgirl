@@ -5,40 +5,6 @@ use Gaodun\SystemConstant;
 
 class IndexController extends CommonController
 {
-    public function testAdduser()
-    {
-        set_time_limit(0);
-        for ($i = 0; $i < 5000; $i++) {
-            $name = $this->getName();
-            $url = 'http://www.gtech9.com/?act=addUser&name=' . $name . '&equipment={device_code:354332073180597,device_info:SM-G9250}&ip=12.23.113.23';
-            echo file_get_contents($url);
-            echo '<br />';
-        }
-        exit;
-    }
-
-    public function testAddmessage()
-    {
-        for ($i = 0; $i <= 100; $i++) {
-            $from_user_id = rand(25, 3000);
-            $mess = 'Hello.' . $this->getName();
-            $url = 'http://www.gtech9.com/?act=addMessage&from_user_id=' . $from_user_id . '&to_user_id=4513&message=' . $mess;
-            echo file_get_contents($url);
-            echo '<br />';
-        }
-        exit;
-    }
-
-    protected function getName()
-    {
-        $a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        $str = '';
-        for ($i = 1; $i <= 6; $i++) {
-            $str .= $a[rand(1, strlen($a))];
-        }
-        return $str;
-    }
-
     /**
      * 添加用户
      *
@@ -192,23 +158,11 @@ class IndexController extends CommonController
     }
 
     /**
-     * 更新在线时间
-     */
-    public function setOnline($userId = 0)
-    {
-        $data['user_id'] = $userId;
-        if ($data['user_id']) {
-            $data['create_time'] = time();
-            D('Online')->setLine($data);
-        }
-    }
-
-    /**
      * 获取在线人数
      */
     public function getOnlineCount()
     {
-        $this->setOnline(I('user_id', 0, 'intval'));
+        D('Online')->setLine(['user_id'=> I('user_id', 0, 'intval'), 'create_time' => time()]);
         $this->_data = ['count' => D('Online')->getCount(['create_time' => ['gt', (time() - 300)]])];
         $this->_retMsg = '获取成功';
         $this->_status = SystemConstant::getConstant('success');
